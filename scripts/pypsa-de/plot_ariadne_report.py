@@ -22,11 +22,11 @@ from matplotlib.ticker import FuncFormatter
 from pypsa.plot import add_legend_lines
 
 from scripts._helpers import configure_logging, mock_snakemake, set_scenario_config
-from scripts.export_ariadne_variables import get_discretized_value, process_postnetworks
+from export_ariadne_variables import get_discretized_value, process_postnetworks
 from scripts.plot_power_network import load_projection
 from scripts.plot_summary import preferred_order, rename_techs
 from scripts.prepare_sector_network import prepare_costs
-from scripts.pypsa.plot import add_legend_circles, add_legend_lines, add_legend_patches
+from pypsa.plot import add_legend_circles, add_legend_lines, add_legend_patches
 
 logger = logging.getLogger(__name__)
 
