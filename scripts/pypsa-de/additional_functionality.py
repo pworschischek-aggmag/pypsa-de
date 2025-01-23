@@ -208,6 +208,18 @@ def h2_import_limits(n, investment_year, limits_volume_max):
             carrier_attribute="",
         )
 
+        logger.info("Adding H2 export ban")
+
+        cname = f"H2_export_ban-{ct}"
+
+        n.model.add_constraints(lhs >= 0, name=f"GlobalConstraint-{cname}")
+
+        if cname in n.global_constraints.index:
+            logger.warning(
+                f"Global constraint {cname} already exists. Dropping and adding it again."
+            )
+            n.global_constraints.drop(cname, inplace=True)
+
 
 def h2_production_limits(n, investment_year, limits_volume_min, limits_volume_max):
     for ct in limits_volume_max["electrolysis"]:
@@ -646,6 +658,18 @@ def add_h2_derivate_limit(n, investment_year, limits_volume_max):
             type="",
             carrier_attribute="",
         )
+
+        logger.info("Adding H2 derivate export ban")
+
+        cname = f"H2_derivate_export_ban-{ct}"
+
+        n.model.add_constraints(lhs >= 0, name=f"GlobalConstraint-{cname}")
+
+        if cname in n.global_constraints.index:
+            logger.warning(
+                f"Global constraint {cname} already exists. Dropping and adding it again."
+            )
+            n.global_constraints.drop(cname, inplace=True)
 
 
 def adapt_nuclear_output(n):
