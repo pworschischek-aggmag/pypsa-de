@@ -2449,7 +2449,6 @@ def plot_elec_map_de(
         frameon=True,
         facecolor="white",
         fontsize=14,
-
     )
 
     add_legend_patches(ax, colors, labels, legend_kw=legend_kw_patches)
