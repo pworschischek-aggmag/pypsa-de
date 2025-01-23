@@ -150,4 +150,9 @@ if __name__ == "__main__":
         f"Setting lifetime of central gas CHP to {costs.at[("central gas CHP" , "lifetime") , "value"]} {costs.at[("central gas CHP" , "lifetime") , "unit"]}."
     )
 
+    # decrease Fischer-Tropsch efficiency
+    costs.at[("Fischer-Tropsch", "efficiency"), "value"] = 1 / costs.at[("Fischer-Tropsch", "hydrogen-input"), "value"]
+
+    
+
     costs.to_csv(snakemake.output[0])
