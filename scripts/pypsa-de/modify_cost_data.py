@@ -154,5 +154,15 @@ if __name__ == "__main__":
     costs.at[("Fischer-Tropsch", "efficiency"), "value"] = (
         1 / costs.at[("Fischer-Tropsch", "hydrogen-input"), "value"]
     )
+    
+    # increase FOM of offshore wind connection (fix for costs.csv)
+    costs.loc[("offwind-dc-connection-submarine", "FOM"), "value"] = 0.35
+    costs.loc[("offwind-dc-connection-submarine", "FOM"), "unit"] = costs.at[("offwind", "FOM"), "unit"]
+    costs.loc[("offwind-dc-connection-underground", "FOM"), "value"] = 0.35
+    costs.loc[("offwind-dc-connection-underground", "FOM"), "unit"] = costs.at[("offwind", "FOM"), "unit"]
+    costs.loc[("offwind-ac-connection-submarine", "FOM"), "value"] = 0.35
+    costs.loc[("offwind-ac-connection-submarine", "FOM"), "unit"] = costs.at[("offwind", "FOM"), "unit"]
+    costs.loc[("offwind-ac-connection-underground", "FOM"), "value"] = 0.35
+    costs.loc[("offwind-ac-connection-underground", "FOM"), "unit"] = costs.at[("offwind", "FOM"), "unit"]
 
     costs.to_csv(snakemake.output[0])
