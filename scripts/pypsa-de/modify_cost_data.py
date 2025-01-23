@@ -151,8 +151,8 @@ if __name__ == "__main__":
     )
 
     # decrease Fischer-Tropsch efficiency
-    costs.at[("Fischer-Tropsch", "efficiency"), "value"] = 1 / costs.at[("Fischer-Tropsch", "hydrogen-input"), "value"]
-
-    
+    costs.at[("Fischer-Tropsch", "efficiency"), "value"] = (
+        1 / costs.at[("Fischer-Tropsch", "hydrogen-input"), "value"]
+    )
 
     costs.to_csv(snakemake.output[0])
