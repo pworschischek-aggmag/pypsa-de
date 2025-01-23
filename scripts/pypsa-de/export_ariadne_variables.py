@@ -248,7 +248,7 @@ def _get_h2_fossil_fraction(n):
         .sum()
     )
 
-    h2_fossil_fraction = total_h2_supply.get("SMR") / total_h2_supply.sum()
+    h2_fossil_fraction = total_h2_supply.filter(like="SMR").sum() / total_h2_supply.sum()
 
     return h2_fossil_fraction
 
