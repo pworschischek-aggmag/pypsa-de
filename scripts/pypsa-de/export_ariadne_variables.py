@@ -5,6 +5,9 @@ import math
 import os
 import re
 import sys
+
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + "/../.."))
+
 from functools import reduce
 
 import numpy as np
