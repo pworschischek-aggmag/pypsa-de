@@ -219,7 +219,7 @@ def h2_import_limits(n, investment_year, limits_volume_max):
                 f"Global constraint {cname} already exists. Dropping and adding it again."
             )
             n.global_constraints.drop(cname, inplace=True)
-        
+
         n.add(
             "GlobalConstraint",
             cname,
