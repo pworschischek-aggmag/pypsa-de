@@ -445,9 +445,9 @@ solving:
             2020: 7.8
             2025: 11.3
             2030: 29.3 # uba Projektionsbericht and NEP without delayed BalWin 3
-            2035: 40
-            2040: 60
-            2045: 70
+            2035: 51.3 # Planned projects until 2035 -> offshore_connection_points.csv
+            2040: 65   # Planned projects until 2040 -1.5 GW for potential retirments
+            2045: 70 
         solar:
           DE:
             2020: 53.7
