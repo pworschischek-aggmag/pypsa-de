@@ -154,6 +154,7 @@ if __name__ == "__main__":
     costs.at[("Fischer-Tropsch", "efficiency"), "value"] = (
         1 / costs.at[("Fischer-Tropsch", "hydrogen-input"), "value"]
     )
+    costs.at[("Fischer-Tropsch", "efficiency"), "source"] = "inverse of hydrogen-input"
 
     # increase FOM of offshore wind connection (fix for costs.csv)
     costs.loc[("offwind-dc-connection-submarine", "FOM"), "value"] = 0.35
