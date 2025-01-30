@@ -35,7 +35,7 @@ if __name__ == "__main__":
         f"Adjusting heating stock towards hard coded values from a previous REMod run. This is only a hotfix."
     )  # Because REMod is not consistent and a better solution takes too long.
 
-    new_values["gas boiler"] = 11.44
+    new_values["gas boiler"] = 11.44 # million
     new_values["oil boiler"] = 5.99
     new_values["air heat pump"] = 0.38
     new_values["ground heat pump"] = 0.38
