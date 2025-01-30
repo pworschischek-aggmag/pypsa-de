@@ -31,11 +31,9 @@ if __name__ == "__main__":
 
     new_values = pd.Series()
 
-
     logger.warning(
         f"Adjusting heating stock towards hard coded values from a previous REMod run. This is only a hotfix."
-    ) # Because REMod is not consistent and a better solution takes too long.
-
+    )  # Because REMod is not consistent and a better solution takes too long.
 
     new_values["gas boiler"] = 11.44
     new_values["oil boiler"] = 5.99
@@ -51,8 +49,6 @@ if __name__ == "__main__":
     for tech, peak in new_values.items():
         existing_heating.at["Germany", tech] = peak
 
-    logger.info(
-        f"Heating demand after modification: {existing_heating.loc['Germany']}"
-    )
+    logger.info(f"Heating demand after modification: {existing_heating.loc['Germany']}")
 
     existing_heating.to_csv(snakemake.output.existing_heating)

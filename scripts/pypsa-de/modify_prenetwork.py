@@ -406,7 +406,9 @@ def unravel_carbonaceous_fuels(n):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info("Efuel export ban: Setting p_max_pu to 0 for DE renewable oil -> EU oil")
+        logger.info(
+            "Efuel export ban: Setting p_max_pu to 0 for DE renewable oil -> EU oil"
+        )
         n.links.loc["DE renewable oil -> EU oil", "p_max_pu"] = 0
 
     n.add(
@@ -487,7 +489,9 @@ def unravel_carbonaceous_fuels(n):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info("Efuel export ban: Setting p_max_pu to 0 for DE methanol -> EU methanol")
+        logger.info(
+            "Efuel export ban: Setting p_max_pu to 0 for DE methanol -> EU methanol"
+        )
         n.links.loc["DE methanol -> EU methanol", "p_max_pu"] = 0
 
     # add stores
@@ -711,7 +715,9 @@ def unravel_gasbus(n, costs):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info("Efuel export ban: Setting p_max_pu to 0 for DE renewable gas -> EU gas") 
+        logger.info(
+            "Efuel export ban: Setting p_max_pu to 0 for DE renewable gas -> EU gas"
+        )
         n.links.loc["DE renewable gas -> EU gas", "p_max_pu"] = 0
 
     ### add links between renewable and fossil gas buses
