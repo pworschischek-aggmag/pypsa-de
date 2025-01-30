@@ -17,21 +17,7 @@ if __name__ == "__main__":
 
     configure_logging(snakemake)
 
-    leitmodell = snakemake.params.leitmodelle["buildings"]
-    logger.info(f"Using {leitmodell} for heating demand modification.")
-
     existing_heating = pd.read_csv(snakemake.input.existing_heating, index_col=0)
-
-    ariadne = pd.read_csv(
-        snakemake.input.ariadne,
-        index_col=["model", "scenario", "region", "variable", "unit"],
-    ).loc[
-        leitmodell,
-        snakemake.params.fallback_reference_scenario,
-        "Deutschland",
-        :,
-        "million",
-    ]
 
     logger.info(f"Heating demand before modification:{existing_heating.loc['Germany']}")
 
@@ -45,38 +31,22 @@ if __name__ == "__main__":
 
     new_values = pd.Series()
 
-    year = "2020"
-    for tech in mapping:
-        stock = ariadne.at[
-            f"Stock|Space Heating|{mapping[tech]}",
-            year,
-        ]
 
-        peak = (
-            stock
-            * existing_heating.loc["Germany"].sum()
-            / ariadne.at[f"Stock|Space Heating", year]
-        )
-        new_values[tech] = peak
+    logger.warning(
+        f"Adjusting heating stock towards hard coded values from a previous REMod run. This is only a hotfix."
+    ) # Because REMod is not consistent and a better solution takes too long.
 
-    if any(new_values.isna()):
-        logger.warning(
-            f"Missing values for {new_values[new_values.isna()].index.to_list()}. Switching to hard coded values from a previous REMod run."
-        )
 
-        total_stock = 23.28  # million
-        existing_factor = existing_heating.loc["Germany"].sum() / total_stock
+    new_values["gas boiler"] = 11.44
+    new_values["oil boiler"] = 5.99
+    new_values["air heat pump"] = 0.38
+    new_values["ground heat pump"] = 0.38
+    new_values["biomass boiler"] = 2.8
 
-        new_values["gas boiler"] = 11.44
-        new_values["oil boiler"] = 5.99
-        new_values["air heat pump"] = 0.38
-        new_values["ground heat pump"] = 0.38
-        new_values["biomass boiler"] = 2.8
+    total_stock = new_values.sum()
+    existing_factor = existing_heating.loc["Germany"].sum() / total_stock
 
-        logger.info(new_values)
-        logger.warning(f"Total stock: {total_stock}, New stock: {new_values.sum()}")
-        logger.warning(f"District heating is not correctly accounted for in the new stock.")
-        new_values *= existing_factor
+    new_values *= existing_factor
 
     for tech, peak in new_values.items():
         existing_heating.at["Germany", tech] = peak
