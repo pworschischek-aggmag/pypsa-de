@@ -4396,9 +4396,85 @@ def get_economy(n, region):
 
         return tsc
 
+    def get_link_opex(n, carriers, region, sw):
+        # get flow of electricity/hydrogen...
+        # multiply it with the marginal costs
+        supplying = n.links[(n.links.carrier.isin(carriers))
+                & (n.links.bus0.str.startswith(region))
+                & (~n.links.bus1.str.startswith(region))].index
+
+        receiving = n.links[(n.links.carrier.isin(carriers))
+                & (~n.links.bus0.str.startswith(region))
+                & (n.links.bus1.str.startswith(region))].index
+
+        trade_out = 0
+        for index in supplying:
+                # price of energy in trade country
+                marg_price = n.buses_t.marginal_price[n.links.loc[index].bus0]
+                trade = n.links_t.p1[index].mul(sw)
+                trade_out += marg_price.mul(trade).sum()
+
+        trade_in = 0
+        for index in receiving:
+                # price of energy in Germany
+                marg_price = n.buses_t.marginal_price[n.links.loc[index].bus0]
+                trade = n.links_t.p1[index].mul(sw)
+                trade_in += marg_price.mul(trade).sum()
+        return abs(trade_in) - abs(trade_out)
+        # > 0: costs for Germany
+        # < 0: profit for Germany
+
+    def get_line_opex(n, region, sw):
+        supplying = n.lines[(n.lines.carrier.isin(["AC"]))
+                        & (n.lines.bus0.str.startswith(region))
+                        & (~n.lines.bus1.str.startswith(region))].index
+        receiving = n.lines[(n.lines.carrier.isin(["AC"]))
+                        & (~n.lines.bus0.str.startswith(region))
+                        & (n.lines.bus1.str.startswith(region))].index
+
+        # i have to clip the trade
+        net_out = 0
+        for index in supplying:
+            trade = n.lines_t.p1[index].mul(sw)
+            trade_out = trade.clip(lower=0) # positive
+            trade_in = trade.clip(upper=0) # negative
+            marg_price_DE = n.buses_t.marginal_price[n.lines.loc[index].bus0]
+            marg_price_EU = n.buses_t.marginal_price[n.lines.loc[index].bus1]
+            net_out += trade_out.mul(marg_price_DE).sum() + trade_in.mul(marg_price_EU).sum()
+            # net_out > 0: Germany is exporting more electricity
+            # net_out < 0: Germany is importing more electricity
+
+        net_in = 0
+        for index in receiving:
+            trade = n.lines_t.p1[index].mul(sw)
+            trade_in = trade.clip(lower=0) # positive
+            trade_out = trade.clip(upper=0) # negative
+            trade_out = trade_out.clip(upper=0)
+            marg_price_EU = n.buses_t.marginal_price[n.lines.loc[index].bus0]
+            marg_price_DE = n.buses_t.marginal_price[n.lines.loc[index].bus1]
+            net_in += trade_in.mul(marg_price_EU).sum() + trade_out.mul(marg_price_DE).sum()
+            # net_in > 0: Germany is importing more electricity
+            # net_in < 0: Germany is exporting more electricity
+
+        return -net_out + net_in
+
+    trade_carriers = [
+        "DC",
+        "H2 pipeline",
+        "H2 pipeline (Kernnetz)",
+        "H2 pipeline retrofitted"
+        "renewable oil",
+        "renewable gas",
+        "methanol",
+        ]
+
+    sw = n.snapshot_weightings.generators
+    tsc = get_tsc(n, region).sum().sum()
+    trade_costs = get_link_opex(n, trade_carriers, region, sw) + get_line_opex(n, region, sw)
+
     # Cost|Total Energy System Cost in billion EUR2020/yr
     var["Cost|Total Energy System Cost"] = round(
-        get_tsc(n, region).sum().sum() / 1e9, 4
+        (tsc + trade_costs) / 1e9, 4
     )
 
     return var
