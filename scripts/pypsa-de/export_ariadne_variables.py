@@ -107,7 +107,7 @@ def domestic_length_factor(n, carriers, region="DE"):
 
 def _get_fuel_fractions(n, region, fuel):
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "at_port": True,
         "nice_names": False,
     }
@@ -243,7 +243,7 @@ def _get_fuel_fractions(n, region, fuel):
 
 def _get_h2_fossil_fraction(n):
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "at_port": True,
         "nice_names": False,
     }
@@ -562,7 +562,7 @@ def get_capacity_additions_nstat(n, region):
 
 def _get_capacities(n, region, cap_func, cap_string="Capacity|"):
     kwargs = {
-        "groupby": n.statistics.groupers.get_bus_and_carrier,
+        "groupby": ["bus", "carrier"],
         "at_port": True,
         "nice_names": False,
     }
@@ -1119,7 +1119,7 @@ def _get_capacities(n, region, cap_func, cap_string="Capacity|"):
 
 def get_CHP_E_and_H_usage(n, bus_carrier, region, fossil_fraction=1):
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
 
@@ -1149,7 +1149,7 @@ def get_CHP_E_and_H_usage(n, bus_carrier, region, fossil_fraction=1):
 
 def get_primary_energy(n, region):
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
 
@@ -1481,7 +1481,7 @@ def get_primary_energy(n, region):
 
 def get_secondary_energy(n, region, _industry_demand):
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
     var = pd.Series()
@@ -1923,7 +1923,7 @@ def get_final_energy(
     var = pd.Series()
 
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
     h2_fossil_fraction = _get_h2_fossil_fraction(n)
@@ -2608,7 +2608,7 @@ def get_emissions(n, region, _energy_totals, industry_demand):
     ).sum()
 
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
 
@@ -3103,7 +3103,7 @@ def get_nodal_flows(n, bus_carrier, region, query="index == index or index != in
         pandas.DataFrame: The nodal flows for the specified bus carrier and region.
     """
 
-    groupby = n.statistics.groupers.get_name_bus_and_carrier
+    groupby = ["name", "bus", "carrier"]
 
     result = (
         n.statistics.withdrawal(
@@ -3137,7 +3137,7 @@ def get_nodal_supply(n, bus_carrier, query="index == index or index != index"):
         pandas.DataFrame: The nodal flows for the specified bus carrier and region.
     """
 
-    groupby = n.statistics.groupers.get_name_bus_and_carrier
+    groupby = ["name", "bus", "carrier"]
 
     result = (
         n.statistics.supply(
@@ -3331,7 +3331,7 @@ def get_prices(n, region):
     var = pd.Series()
 
     kwargs = {
-        "groupby": n.statistics.groupers.get_name_bus_and_carrier,
+        "groupby": ["name", "bus", "carrier"],
         "nice_names": False,
     }
     try:
@@ -5554,7 +5554,7 @@ if __name__ == "__main__":
         cap_func = n.statistics.optimal_capacity
         cap_string = "Optimal Capacity|"
         kwargs = {
-            "groupby": n.statistics.groupers.get_bus_and_carrier,
+            "groupby": ["bus", "carrier"],
             "at_port": True,
             "nice_names": False,
         }
