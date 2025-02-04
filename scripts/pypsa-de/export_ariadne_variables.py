@@ -14,11 +14,11 @@ import numpy as np
 import pandas as pd
 import pypsa
 from numpy import isclose
+from pypsa.statistics import get_transmission_carriers
 
 from scripts._helpers import configure_logging, mock_snakemake
 from scripts.add_electricity import calculate_annuity
 from scripts.prepare_sector_network import prepare_costs
-from pypsa.statistics import get_transmission_carriers
 
 logger = logging.getLogger(__name__)
 
@@ -4308,40 +4308,92 @@ def get_economy(n, region):
 
     def get_tsc(n, country):
         n.statistics.set_parameters(drop_zero=False)
-        capex = n.statistics.capex(groupby=pypsa.statistics.groupers["name", "carrier"], nice_names=False)
-        
-        opex = n.statistics.opex(groupby=pypsa.statistics.groupers["name", "carrier"], nice_names=False)
-        
+        capex = n.statistics.capex(
+            groupby=pypsa.statistics.groupers["name", "carrier"], nice_names=False
+        )
+
+        opex = n.statistics.opex(
+            groupby=pypsa.statistics.groupers["name", "carrier"], nice_names=False
+        )
+
         # filter inter country transmission lines and links
-        inter_country_lines = (n.lines.bus0.map(n.buses.country)!=n.lines.bus1.map(n.buses.country))
-        inter_country_links = (n.links.bus0.map(n.buses.country)!=n.links.bus1.map(n.buses.country))
+        inter_country_lines = n.lines.bus0.map(n.buses.country) != n.lines.bus1.map(
+            n.buses.country
+        )
+        inter_country_links = n.links.bus0.map(n.buses.country) != n.links.bus1.map(
+            n.buses.country
+        )
         #
         transmission_carriers = get_transmission_carriers(n).get_level_values("carrier")
         transmission_lines = n.lines.carrier.isin(transmission_carriers)
         transmission_links = n.links.carrier.isin(transmission_carriers)
-        # 
-        country_transmission_lines = ((n.lines.bus0.str.contains(country)) & ~(n.lines.bus1.str.contains(country))) | (~(n.lines.bus0.str.contains(country)) & (n.lines.bus1.str.contains(country)))
-        country_tranmission_links = ((n.links.bus0.str.contains(country)) & ~(n.links.bus1.str.contains(country))) | (~(n.links.bus0.str.contains(country)) & (n.links.bus1.str.contains(country)))
         #
-        inter_country_transmission_lines = inter_country_lines&transmission_lines&country_transmission_lines
-        inter_country_transmission_links = inter_country_links&transmission_links&country_tranmission_links
-        inter_country_transmission_lines_i = inter_country_transmission_lines[inter_country_transmission_lines].index
-        inter_country_transmission_links_i = inter_country_transmission_links[inter_country_transmission_links].index
-        inter_country_transmission_i=inter_country_transmission_lines_i.union(inter_country_transmission_links_i)
-        
+        country_transmission_lines = (
+            (n.lines.bus0.str.contains(country)) & ~(n.lines.bus1.str.contains(country))
+        ) | (
+            ~(n.lines.bus0.str.contains(country)) & (n.lines.bus1.str.contains(country))
+        )
+        country_tranmission_links = (
+            (n.links.bus0.str.contains(country)) & ~(n.links.bus1.str.contains(country))
+        ) | (
+            ~(n.links.bus0.str.contains(country)) & (n.links.bus1.str.contains(country))
+        )
         #
-        tsc=pd.concat([capex, opex], axis=1, keys=["capex", "opex"])
+        inter_country_transmission_lines = (
+            inter_country_lines & transmission_lines & country_transmission_lines
+        )
+        inter_country_transmission_links = (
+            inter_country_links & transmission_links & country_tranmission_links
+        )
+        inter_country_transmission_lines_i = inter_country_transmission_lines[
+            inter_country_transmission_lines
+        ].index
+        inter_country_transmission_links_i = inter_country_transmission_links[
+            inter_country_transmission_links
+        ].index
+        inter_country_transmission_i = inter_country_transmission_lines_i.union(
+            inter_country_transmission_links_i
+        )
+
+        #
+        tsc = pd.concat([capex, opex], axis=1, keys=["capex", "opex"])
         tsc = tsc.reset_index().set_index("name")
-        tsc.loc[inter_country_transmission_i, ["capex", "opex"]] = tsc.loc[inter_country_transmission_i, ["capex", "opex"]]/2
-        tsc.rename(index={index: index + " " + country for index in inter_country_transmission_i}, inplace=True)
+        tsc.loc[inter_country_transmission_i, ["capex", "opex"]] = (
+            tsc.loc[inter_country_transmission_i, ["capex", "opex"]] / 2
+        )
+        tsc.rename(
+            index={
+                index: index + " " + country for index in inter_country_transmission_i
+            },
+            inplace=True,
+        )
         # rename inter region links and lines
-        to_rename_links = n.links[(n.links.bus0.str.contains(region)) & (n.links.bus1.str.contains(region)) & ~(n.links.index.str.contains(region))].index
-        to_rename_lines = n.lines[(n.lines.bus0.str.contains(region)) & (n.lines.bus1.str.contains(region)) & ~(n.lines.index.str.contains(region))].index
-        tsc.rename(index={index: index + " " + region for index in to_rename_links}, inplace=True)
-        tsc.rename(index={index: index + " " + region for index in to_rename_lines}, inplace=True)
-        
-        tsc = tsc.filter(like=country, axis=0).drop("component", axis=1).groupby("carrier").sum()
-        
+        to_rename_links = n.links[
+            (n.links.bus0.str.contains(region))
+            & (n.links.bus1.str.contains(region))
+            & ~(n.links.index.str.contains(region))
+        ].index
+        to_rename_lines = n.lines[
+            (n.lines.bus0.str.contains(region))
+            & (n.lines.bus1.str.contains(region))
+            & ~(n.lines.index.str.contains(region))
+        ].index
+        tsc.rename(
+            index={index: index + " " + region for index in to_rename_links},
+            inplace=True,
+        )
+        tsc.rename(
+            index={index: index + " " + region for index in to_rename_lines},
+            inplace=True,
+        )
+
+        tsc = (
+            tsc.filter(like=country, axis=0)
+            .drop("component", axis=1)
+            .groupby("carrier")
+            .sum()
+        )
+
         return tsc
 
     # Cost|Total Energy System Cost in billion EUR2020/yr
