@@ -406,12 +406,15 @@ def unravel_carbonaceous_fuels(n, current_year):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info(
-            "Efuel export ban: Deactivating link DE renewable oil -> EU oil"
-        )
+        logger.info("Efuel export ban: Deactivating link DE renewable oil -> EU oil")
         n.links.loc["DE renewable oil -> EU oil", "active"] = False
 
-        if snakemake.params.solving["constraints"]["limits_volume_max"]["h2_derivate_import"]["DE"][current_year] == 0:
+        if (
+            snakemake.params.solving["constraints"]["limits_volume_max"][
+                "h2_derivate_import"
+            ]["DE"][current_year]
+            == 0
+        ):
             logger.info(
                 "Efuel export ban and H2 derivate import == 0: Deactivating link DE renewable oil -> EU oil"
             )
@@ -494,11 +497,14 @@ def unravel_carbonaceous_fuels(n, current_year):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info(
-            "Efuel export ban: Deactivating link DE methanol -> EU methanol"
-        )
+        logger.info("Efuel export ban: Deactivating link DE methanol -> EU methanol")
         n.links.loc["DE methanol -> EU methanol", "active"] = False
-        if snakemake.params.solving["constraints"]["limits_volume_max"]["h2_derivate_import"]["DE"][current_year] == 0:
+        if (
+            snakemake.params.solving["constraints"]["limits_volume_max"][
+                "h2_derivate_import"
+            ]["DE"][current_year]
+            == 0
+        ):
             logger.info(
                 "Efuel export ban and H2 derivate import == 0: Deactivating link EU methanol -> DE methanol"
             )
@@ -725,11 +731,14 @@ def unravel_gasbus(n, costs, current_year):
     )
 
     if snakemake.params.efuel_export_ban:
-        logger.info(
-            "Efuel export ban: Deactivating link DE renewable gas -> EU gas"
-        )
+        logger.info("Efuel export ban: Deactivating link DE renewable gas -> EU gas")
         n.links.loc["DE renewable gas -> EU gas", "active"] = False
-        if snakemake.params.solving["constraints"]["limits_volume_max"]["h2_derivate_import"]["DE"][current_year] == 0:
+        if (
+            snakemake.params.solving["constraints"]["limits_volume_max"][
+                "h2_derivate_import"
+            ]["DE"][current_year]
+            == 0
+        ):
             logger.info(
                 "Efuel export ban and H2 derivate import == 0: Deactivating link EU renewable gas -> DE gas"
             )
@@ -1380,7 +1389,6 @@ if __name__ == "__main__":
             snakemake.wildcards.planning_horizons
         ):
             force_retrofit(n, snakemake.params.H2_plants)
-
 
     enforce_transmission_project_build_years(n, current_year)
 
