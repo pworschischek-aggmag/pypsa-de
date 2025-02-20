@@ -2281,7 +2281,7 @@ def plot_elec_map_de(
     if expansion_case == "total-expansion":
         line_widths = total_exp_linew / linew_factor
         link_widths = total_exp_linkw / linkw_factor
-        title = "Stromnetzausbau (gesamt)"
+        title = "Stromnetzausbau [GW]"
     elif expansion_case == "startnetz":
         line_widths = startnetz_linew / linew_factor
         link_widths = startnetz_linkw / linkw_factor
@@ -2357,13 +2357,13 @@ def plot_elec_map_de(
 
     # AC
     sizes_ac = [10, 5]
-    labels_ac = [f"HVAC ({s} GW)" for s in sizes_ac]
+    labels_ac = [f"HVAC [{s} GW]" for s in sizes_ac]
     scale = 1e3 / linew_factor
     sizes_ac = [s * scale for s in sizes_ac]
 
     # DC
     sizes_dc = [5, 2]
-    labels_dc = [f"HVDC ({s} GW)" for s in sizes_dc]
+    labels_dc = [f"HVDC [{s} GW]" for s in sizes_dc]
     scale = 1e3 / linkw_factor
     sizes_dc = [s * scale for s in sizes_dc]
 
