@@ -959,7 +959,7 @@ def plot_energy_balance_timeseries(
         resample = f"native-{time}"
     fn = f"ts-balance-{ylabel.replace(' ', '_')}-{resample}"
     # plt.savefig(dir + "/" + fn + ".pdf")
-    plt.savefig(dir + "/" + fn + ".png")
+    plt.savefig(dir + "/" + fn + ".pdf")
     plt.close()
 
 
@@ -2937,7 +2937,7 @@ if __name__ == "__main__":
             tech_colors=tech_colors,
             start_date="2019-01-01 00:00:00",
             end_date="2019-12-31 00:00:00",
-            savepath=f"{snakemake.output.elec_balances}/elec-all-year-DE-{year}.png",
+            savepath=f"{snakemake.output.elec_balances}/elec-all-year-DE-{year}.pdf",
             model_run=snakemake.wildcards.run,
             resample="D",
             plot_lmps=False,
@@ -2956,7 +2956,7 @@ if __name__ == "__main__":
             tech_colors=tech_colors,
             start_date="2019-01-01 00:00:00",
             end_date="2019-01-31 00:00:00",
-            savepath=f"{snakemake.output.elec_balances}/elec-Jan-DE-{year}.png",
+            savepath=f"{snakemake.output.elec_balances}/elec-Jan-DE-{year}.pdf",
             model_run=snakemake.wildcards.run,
             german_carriers=True,
             threshold=1e2,
@@ -2972,7 +2972,7 @@ if __name__ == "__main__":
             tech_colors=tech_colors,
             start_date="2019-05-01 00:00:00",
             end_date="2019-05-31 00:00:00",
-            savepath=f"{snakemake.output.elec_balances}/elec-May-DE-{year}.png",
+            savepath=f"{snakemake.output.elec_balances}/elec-May-DE-{year}.pdf",
             model_run=snakemake.wildcards.run,
             german_carriers=True,
             threshold=1e2,
@@ -2991,7 +2991,7 @@ if __name__ == "__main__":
                 tech_colors=tech_colors,
                 start_date="2019-01-01 00:00:00",
                 end_date="2019-12-31 00:00:00",
-                savepath=f"{snakemake.output.heat_balances}/heat-all-year-DE-{carriers}-{year}.png",
+                savepath=f"{snakemake.output.heat_balances}/heat-all-year-DE-{carriers}-{year}.pdf",
                 model_run=snakemake.wildcards.run,
                 resample="D",
                 plot_lmps=False,
@@ -3011,7 +3011,7 @@ if __name__ == "__main__":
                 tech_colors=tech_colors,
                 start_date="2019-01-01 00:00:00",
                 end_date="2019-01-31 00:00:00",
-                savepath=f"{snakemake.output.heat_balances}/heat-Jan-DE-{carriers}-{year}.png",
+                savepath=f"{snakemake.output.heat_balances}/heat-Jan-DE-{carriers}-{year}.pdf",
                 model_run=snakemake.wildcards.run,
                 plot_lmps=False,
                 plot_loads=False,
@@ -3028,7 +3028,7 @@ if __name__ == "__main__":
                 tech_colors=tech_colors,
                 start_date="2019-05-01 00:00:00",
                 end_date="2019-05-31 00:00:00",
-                savepath=f"{snakemake.output.heat_balances}/heat-May-DE-{carriers}-{year}.png",
+                savepath=f"{snakemake.output.heat_balances}/heat-May-DE-{carriers}-{year}.pdf",
                 model_run=snakemake.wildcards.run,
                 plot_lmps=False,
                 plot_loads=False,
@@ -3046,7 +3046,7 @@ if __name__ == "__main__":
             tech_colors=tech_colors,
             start_date="2019-01-01 00:00:00",
             end_date="2019-12-31 00:00:00",
-            savepath=f"{snakemake.output.results}/storage-DE-{year}.png",
+            savepath=f"{snakemake.output.results}/storage-DE-{year}.pdf",
             model_run=snakemake.wildcards.run,
         )
 
@@ -3111,7 +3111,7 @@ if __name__ == "__main__":
         plot_h2_map(
             network,
             regions,
-            savepath=f"{snakemake.output.h2_transmission}/h2_transmission_all-regions_{year}.png",
+            savepath=f"{snakemake.output.h2_transmission}/h2_transmission_all-regions_{year}.pdf",
         )
 
         regions_de = regions[regions.index.str.startswith("DE")]
@@ -3124,7 +3124,7 @@ if __name__ == "__main__":
                 regions_de,
                 tech_colors=tech_colors,
                 specify_buses=sb,
-                savepath=f"{snakemake.output.h2_transmission}/h2_transmission_DE_{sb}_{year}.png",
+                savepath=f"{snakemake.output.h2_transmission}/h2_transmission_DE_{sb}_{year}.pdf",
             )
             del network
 
@@ -3132,7 +3132,7 @@ if __name__ == "__main__":
         networks,
         planning_horizons,
         tech_colors,
-        savepath=f"{snakemake.output.h2_transmission}/h2-trade-DE.png",
+        savepath=f"{snakemake.output.h2_transmission}/h2-trade-DE.pdf",
     )
 
     ## electricity transmission
@@ -3145,21 +3145,21 @@ if __name__ == "__main__":
                 networks[planning_horizons.index(2020)],
                 tech_colors,
                 regions_de,
-                savepath=f"{snakemake.output.elec_transmission}/elec-transmission-DE-{s}-{year}.png",
+                savepath=f"{snakemake.output.elec_transmission}/elec-transmission-DE-{s}-{year}.pdf",
                 expansion_case=s,
             )
         plot_cap_map_de(
             networks[planning_horizons.index(year)],
             tech_colors,
             regions_de,
-            savepath=f"{snakemake.output.elec_transmission}/elec-cap-DE-{year}.png",
+            savepath=f"{snakemake.output.elec_transmission}/elec-cap-DE-{year}.pdf",
         )
 
     plot_elec_trade(
         networks,
-        planning_horizons,
+        planning_horizons, 
         tech_colors,
-        savepath=f"{snakemake.output.elec_transmission}/elec-trade-DE.png",
+        savepath=f"{snakemake.output.elec_transmission}/elec-trade-DE.pdf",
     )
 
     ## nodal balances general (might not be very robust)
