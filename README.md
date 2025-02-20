@@ -6,6 +6,9 @@ PyPSA-DE is a sector-coupled energy system model based on the toolbox [PyPSA](ht
 
 This repository contains the entire scientific project, including data sources and code. The philosophy behind this repository is that no intermediary results are included, but all results are computed from raw data and code.
 
+![Stromnetzausbau in Deutschland](https://github.com/PyPSA/pypsa-de/blob/main/doc/img/INFRA_Stromnetzausbau.png?raw=true)
+
+
 ## Getting ready
 
 You need `conda` or `mamba` to run the analysis. Using conda, you can create an environment from within which you can run the analysis:
