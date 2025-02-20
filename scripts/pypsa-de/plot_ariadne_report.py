@@ -3157,7 +3157,7 @@ if __name__ == "__main__":
 
     plot_elec_trade(
         networks,
-        planning_horizons, 
+        planning_horizons,
         tech_colors,
         savepath=f"{snakemake.output.elec_transmission}/elec-trade-DE.pdf",
     )

@@ -650,10 +650,12 @@ def add_h2_derivate_limit(n, investment_year, limits_volume_max):
             cname = f"{carrier}_import_limit-{ct}"
 
             incoming_p = (
-                n.model["Link-p"].loc[:, incoming[idx]] * n.snapshot_weightings.generators
+                n.model["Link-p"].loc[:, incoming[idx]]
+                * n.snapshot_weightings.generators
             ).sum()
             outgoing_p = (
-                n.model["Link-p"].loc[:, outgoing[idx]] * n.snapshot_weightings.generators
+                n.model["Link-p"].loc[:, outgoing[idx]]
+                * n.snapshot_weightings.generators
             ).sum()
 
             lhs = incoming_p - outgoing_p
