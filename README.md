@@ -1,6 +1,8 @@
-# PyPSA-DE - A Sector-Coupled Optimisation Model of the German Energy System - Ein sektorengekoppeltes Modell des deutschen Energiesystems
+# PyPSA-DE - A Sector-Coupled Optimisation Model of the German Energy System
 
-PyPSA-DE ist sektorengekoppelten Energie-System Modell auf Basis der Toolbox [PyPSA](https://github.com/PyPSA/pypsa) und des europäischen Modells [PyPSA-Eur](https://github.com/PyPSA/pypsa-eur). Der PyPSA-DE Workflow modelliert das deutsche Energiesystem mit deutschlandspezifischen Datensätzen (MaStR, Netzentwicklungsplan,...) im Verbund mit den direkten Stromnachbarn sowie Spanien und Italien. Der Ausbau und der Betrieb von Kraftwerken, des  Strom- und Wasserstoffübertragunsnetzes und die Energieversorgung aller Sektoren werden dann in einem linearen Optimierungsproblem gelöst, mit hoher zeitlicher und räumlicher Auflösung. PyPSA-DE wurde im Rahmen des Kopernikus-Projekts [Ariadne](https://ariadneprojekt.de/) entwickelt in dem Szenarien für ein klimaneutrales Deutschland untersucht werden, und spielt eine zentrale Rolle im Ariadne Szenarienreport, als Leitmodell für den Sektor Energiewirtschaft und als eines von drei Gesamtsystemmodellen.
+### Ein sektorengekoppeltes Modell des deutschen Energiesystems
+
+PyPSA-DE ist ein sektorengekoppeltes Energiesystem-Modell auf Basis der Toolbox [PyPSA](https://github.com/PyPSA/pypsa) und des europäischen Modells [PyPSA-Eur](https://github.com/PyPSA/pypsa-eur). Der PyPSA-DE Workflow modelliert das deutsche Energiesystem mit deutschlandspezifischen Datensätzen (MaStR, Netzentwicklungsplan,...) im Verbund mit den direkten Stromnachbarn sowie Spanien und Italien. Der Ausbau und der Betrieb von Kraftwerken, des  Strom- und Wasserstoffübertragunsnetzes und die Energieversorgung aller Sektoren werden dann in einem linearen Optimierungsproblem gelöst, mit hoher zeitlicher und räumlicher Auflösung. PyPSA-DE wurde im Rahmen des Kopernikus-Projekts [Ariadne](https://ariadneprojekt.de/) entwickelt in dem Szenarien für ein klimaneutrales Deutschland untersucht werden, und spielt eine zentrale Rolle im Ariadne Szenarienreport, als Leitmodell für den Sektor Energiewirtschaft und als eines von drei Gesamtsystemmodellen.
 
 PyPSA-DE is a sector-coupled energy system model based on the toolbox [PyPSA](https://github.com/PyPSA/pypsa) and the European model [PyPSA-Eur](https://github.com/PyPSA/pypsa-eur). It solves a linear optimization problem to simulate the electricty and hydrogen transmission networks, as well as supply, demand and storage in all sectors of the energy system in Germany and its neighboring countries, as well as Italy and Spain, with high spatial and temporal resolution. PyPSA-DE was developed in the context of the Kopernikus-Projekt [Ariadne](https://ariadneprojekt.de/en/), which studies scenarios of a carbon-neutral German economcy, and plays a decisive role in the upcoming Ariadne Szenarienreport, as leading model for the energy sector.
 
@@ -11,9 +13,11 @@ This repository contains the entire scientific project, including data sources a
 ## Getting ready
 
 You need `conda` or `mamba` to run the analysis. Using conda, you can create an environment from within which you can run the analysis:
+
 ```
 conda env create -f envs/{os}-pinned.yaml
 ```
+
 Where `{os}` should be replaced with your operating system, e.g. for linux the command would be:
 
 ```
@@ -104,7 +108,6 @@ PyPSA-DE is a softfork of PyPSA-EUR. As such, large parts of the functionality a
 - `costs:horizon` - specify if technology costs are expected to follow an `optimistic, mean` or `pessimistic` trajectory
 
 ## New Config Options
-
 
 - `iiasa_database` - interaction with IIASA database. Specify a database, and `leitmodelle` for demand and co2 emissions data in specific sectors
 - `wasserstoff_kernnetz` - configure which parts of the Wasserstoff Kernnetz should be included in the model
