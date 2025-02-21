@@ -1,4 +1,4 @@
-# PyPSA-DE - A Sector-Coupled Optimisation Model of the German Energy System
+# PyPSA-DE - High resolution, sector-coupled model of the German Energy System 
 
 ### Ein sektorengekoppeltes Modell des deutschen Energiesystems
 
