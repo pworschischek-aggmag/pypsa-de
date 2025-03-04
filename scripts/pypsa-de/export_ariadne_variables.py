@@ -2863,22 +2863,29 @@ def get_emissions(n, region, _energy_totals, industry_demand):
         n.statistics.supply(bus_carrier="process emissions", **kwargs)
         .filter(like=region)
         .groupby("carrier")
-        .sum())
-    
+        .sum()
+    )
+
     pe_fossil_fraction = (
-            process_emissions.get("process emissions", 0) 
-            + process_emissions.get("naptha for industry", 0) * oil_fossil_fraction
-        ) / process_emissions.sum()
+        process_emissions.get("process emissions", 0)
+        + process_emissions.get("naptha for industry", 0) * oil_fossil_fraction
+    ) / process_emissions.sum()
 
     var["Carbon Sequestration|DACCS"] = co2_negative_emissions.get("DAC", 0)
 
     var["Carbon Sequestration|BECCS"] = co2_negative_emissions.filter(like="bio").sum()
 
     # E and Biofuels with CC
-    var["Carbon Sequestration|Other"] = co2_storage.mul(ccs_fraction)[~co2_storage.index.str.contains("bio|process")].sum() + co2_storage.mul(ccs_fraction).get("process emissions CC") * (1 - pe_fossil_fraction)
+    var["Carbon Sequestration|Other"] = co2_storage.mul(ccs_fraction)[
+        ~co2_storage.index.str.contains("bio|process")
+    ].sum() + co2_storage.mul(ccs_fraction).get("process emissions CC") * (
+        1 - pe_fossil_fraction
+    )
 
     var["Carbon Sequestration"] = (
-        var["Carbon Sequestration|DACCS"] + var["Carbon Sequestration|BECCS"] + var["Carbon Sequestration|Other"]
+        var["Carbon Sequestration|DACCS"]
+        + var["Carbon Sequestration|BECCS"]
+        + var["Carbon Sequestration|Other"]
     )
 
     # assert isclose(
